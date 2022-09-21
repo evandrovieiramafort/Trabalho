@@ -1,0 +1,40 @@
+# ~~~CÓDIGO DETALHANDO PASSO A PASSO DO PROCESSO DE TRATAMENTO DAS PLANILHAS~~~
+
+import pandas as pd
+
+# Definindo as variáveis que vou precisar usar, assim como a lista dos cabeçalhos do dataframe
+# (a troca dos headers será feita logo abaixo)
+
+c = 0
+lista_original = []
+lista_nova = []
+cabecalhos = ["nNF", "natOp", "dhEmi", "CNPJ", "xFant", "xMun", "UF", "xPais", "cProd", 
+              "xProd", "qCom","vProd", "vOrig", "vLiq", "chNFe"]
+novos_cabecalhos = ["Numero da NFe", "Natureza da operação", "Emissão", "CNPJ", "Nome fantasia", "Município",
+                   "UF", "País", "Cód Produto", "Nome Produto", "Quantidade","Valor","Valor cheio", "Valor líquido", 
+                    "ID da NFe"]
+
+# Inserindo items em lista_nova que irão servir como "id" de cada coluna.
+for item in range(0,80):
+    lista_original.append(c)
+    c += 1
+
+# Puxando o database e, imediatamente, removendo as entradas duplicadas para evitar problemas posteriormente.
+relatorio = pd.read_excel(#atalho)
+df = pd.DataFrame(relatorio)
+df.drop_duplicates(subset="Nome da Origem", keep ="first", inplace = True)
+
+# Pegando o "id" das colunas listadas em "cabecalhos"
+for item in cabecalhos:
+    nome_da_coluna = item
+    posicao = df.columns.get_loc(nome_da_coluna)
+    # print("Índice da coluna {} no dataframe é: {}.".format(nome_da_coluna, posicao))
+    # MANTER ESSA LINHA DE CÓDIGO
+    lista_nova.append(posicao)
+
+# Com a "lista_nova" sendo o novo parâmetro e dataframe já com as colunas atualizadas, as colunas vão ser renomeadas
+df_novo = df.iloc[:, lista_nova]
+df_novo.columns = novos_cabecalhos
+
+# Salvando a planilha nova, já depurada
+df1.to_excel("Planilha teste.xlsx")
